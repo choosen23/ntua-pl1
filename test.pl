@@ -90,24 +90,76 @@ ancestor(X, Y) :-
 % ?- append([1,2], [3,4], Z).
 % Z = [1, 2, 3, 4].
 
+%episeis to append xrisimopoihtai kai gia elenxo :
+% ?- append(X, [3,4], [1,2,3,4]).
+% X = [1, 2] ;
+% false.
+
+
+%alla katigorimata gia listes einai ta 
+% member/2
+% select/3
+% nth0/3
+% lenght/2
+
+%iparxei to reverse gia anastrofi mia listas
+%iparxei to sort p ilopoiei taksinomisi
+
+
+
+% h spazokefalia me ton agroti p thelei na perasei apo to potami me to laxano to arni kai ton liko
+
+
+%anaparistw me mai lista tin thesi tou kathenos dld oloi kasekinane apo [w,w,w,w] kai kataligoun [e,e,e,e]
+%tha anaparastisoume tis 4 epitreptes kiniseis
+%dld wolf, sheep , and cabbage (nothing an einai stin varka monos t)
 
 
 
 
 
+%stin prolog sximatizoume tin lisi me ena katigorima to move( Conf, Move, NextConf)
+% Conf : o sximatismos [w,w,w,w]
+% Move einai px Wolf
+% Next conf einai px o epomenos sindiasmo
+
+
+change(e,w) :-
+    change(w,e) .
+
+change(w,e) :-
+    change(e,w) .
+
+move( [X,X,Goat,Cabbage] , wolf , [Y,Y,Goat,Cabbage] ) :-
+    change(X,Y).
+move( [X,Wolf,X,Cabbage] , goat, [Y,Wolf,Y,Cabbage] ) :-
+    change(X,Y).
+move( [X,Wolf,Goat,X] ,cabbage , [Y,Wolf,Goat,Y] ) :-
+    change(X,Y).
+move( [X,Wolf,Goat,Cabbage] , nothing, [Y,Wolf, Goat, Cabbage] ) :-
+    change(X,Y).
+
+
+%tha dimiourgisoume tora tous asfaleis sximatismous dld:
+
+guarded_or_sep(X,X,X) .
+guarded_or_sep(_,Y,Z) :- Y \= Z.
+
+safe([Man,Wolf,Goat,Cabbage] ) :-
+    guarded_or_sep(Man,Goat,Wolf),
+    guarded_or_sep(Man,Goat,Cabbage) .
+
+
+% ftiaxnw tin sinartisi p tha 'trexei' to programma
+
+solution([e,e,e,e], [] ).
+solution(Conf, [Move|Moves]) :-
+    move(Conf,Move, NextConf),
+    safe(NextConf),
+    solution(NextConf,Moves) .
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+% to programma trexei me tin entoli 
+%length(L,N) , solution([w,w,w,w], L).
+% kathos an dn valw to lenthe tha etrexe epaoristwn se mia atermoni loopa
