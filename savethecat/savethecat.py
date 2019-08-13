@@ -64,10 +64,21 @@ while (not(q.empty())):
         griddeathTime[take[0]-1][take[1]] = take[2]+1
         gridVisited[take[0]-1][take[1]] = True
         q.put((take[0]-1,take[1],take[2]+1))
+    
+    elif take[0] < N-1 and gridSymbol[take[0]+1][take[1]] and not gridVisited[rake[0] +1][take[1]] :
+        griddeathTime[take[0] +1][take[1]] = take[2] + 1
+        gridVisited[take[0] +1][take[1]] = True
+        q.put((take[0]+1,take[1],take[2]+1))
 
+    elif take[1] > 0 and gridSymbol[take[0]][take[1] -1] and not gridVisited[take[0]][take[1] -1]:
+        griddeathTime[take[0]][take[1] -1] = take[2] -1
+        gridVisited[take[0]][take[1] -1] = True
+        q.put((take[0],take[1] -1,take[2] +1))
 
-
-
+    elif take[1] < M-1 and gridSymbol[take[0]][take[1] +1] and not gridVisited[take[0]][take[1] +1]:
+            griddeathTime[take[0]][take[1] +1] = take[2] +1
+            gridVisited[take[0]][take[1] +1] = True
+            q.put((take[0],take[1] +1,take[2] +1))    
 
 while (not(cat.empty())):  
     break  
@@ -79,9 +90,56 @@ while (not(cat.empty())):
         gridcatTime[take[0]+1][take[1]] = take[2] + 1
         gridcatVisited[take[0]+1][take[1]] = True
         gridSeq[take[0]+1][take[1]] = gridSeq[take[0]][take[1]]+'D' 
-        cat.get(take[0] + 1,take[1],take[2]+1)
+        cat.put((take[0] + 1,take[1],take[2]+1)
+    
     elif take[1] > 0 and gridSymbol[take[0]][take[1] -1] == '.' and not gridcatVisited[take[0]][take[1] -1] :
         gridcatTime[take[0]][take[1] -1] = take[2] + 1
         gridcatVisited[take[0]][take[1] -1] = True
         gridSeq[take[0]][take[1] -1] =  gridSymbol[take[0]][take[1]] + 'L'
-        cat.get(take[0],take[1] -1,take[2]+1)
+        cat.put((take[0],take[1] -1,take[2]+1))
+    
+    elif take[1] < M-1 and gridSymbol[take[0]][take[1] + 1] == '.' and not gridVisited[take[0][take[1] +1] :
+        gridcatTime[take[0]][take[1] + 1] = take[2] + 1
+        gridcatVisited[take[0]][take[1] + 1] = True
+        gridSeq[take[0]][take[1] + 1] = gridSeq[take[0]][take[1] + 'R'
+        cat.put((take[0],take[1] +1,take[2]+1))
+
+
+     elif take[0] > 0 and gridSymbol[take[0] -1][take[1]] == '.' and not gridcatVisited[take[0] -1][take[1]] :
+        gridcatTime[take[0] -1][take[1]] = take[2] + 1
+        gridcatVisited[take[0] -1][take[1]] = True
+        gridSeq[take[0] -1][take[1]] = gridSeq[take[0]][take[1]]+'D' 
+        cat.put((take[0] - 1,take[1],take[2]+1))   
+
+
+for i in range(N):
+    for j in range(M):
+        if gridcatTime[i][j] >= 0:
+            if gridcatTime[i][j] < griddeathTime[i][j] and griddeathTime[i][j] <= maxTime:
+                solutions.put(i,j,griddeathTime[i][j] -1)
+            elif griddeathTime[i][j] == -1 :
+                solutions.put(i,j,-1)
+
+best = solutions.get()
+
+while not solutions.empty():
+    tmp = solutions.get()
+    if tmp[2] == best[2]:
+        if tmp[0] < best[0]:
+            best = tmp
+        elif tmp[0] == best[0]:
+            if tmp[1] < best[1]:
+                best = a
+    elif tmp[2] > best[2]:
+        best = tmp
+
+if best[2] == -1: print('infinity')
+elif print(best[2])
+if gridSeq[best[0]][best[1]] == 's': print('stay')
+else: print(gridSeq[best[0]][best[1]]) #kati exei me erase..Na to dw kapia stigmi
+
+
+
+
+
+
