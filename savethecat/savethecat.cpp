@@ -43,19 +43,15 @@ int main(int argc, char const *argv[]) {
         M=0;
         N++;
       }
-
       else{
-
         if(a=='W'){
           cell c={N,M,0};
           q.push(c);
           grid[N][M].death_time=0;
           grid[N][M].visited=true;
         }
-
         else if(a=='X')
           grid[N][M].symbol=a;
-
         else if(a=='A'){
           grid[N][M].symbol='.';
           grid[N][M].cat_time=0;
@@ -64,46 +60,35 @@ int main(int argc, char const *argv[]) {
           cell c={N,M,0};
           cat.push(c);
         }
-
         M++;
       }
   }
-
   M=maxM;
-
   int max_time=0;
-
   while(q.size()){
-
     struct cell a=q.front();
     max_time=a.t;
-
     if(a.row > 0 && grid[a.row-1][a.column].symbol=='.' && !grid[a.row-1][a.column].visited){
       grid[a.row-1][a.column].death_time=a.t+1;
       grid[a.row-1][a.column].visited=true;
       q.push(cell{a.row-1,a.column,a.t+1});
     }
-
     if(a.row < N-1 && grid[a.row+1][a.column].symbol=='.' && !grid[a.row+1][a.column].visited){
       grid[a.row+1][a.column].death_time=a.t+1;
       grid[a.row+1][a.column].visited=true;
       q.push(cell{a.row+1,a.column,a.t+1});
     }
-
     if(a.column > 0 && grid[a.row][a.column-1].symbol=='.' && !grid[a.row][a.column-1].visited){
       grid[a.row][a.column-1].death_time=a.t+1;
       grid[a.row][a.column-1].visited=true;
       q.push(cell{a.row,a.column-1,a.t+1});
     }
-
     if(a.column < M-1 && grid[a.row][a.column+1].symbol=='.' && !grid[a.row][a.column+1].visited){
       grid[a.row][a.column+1].death_time=a.t+1;
       grid[a.row][a.column+1].visited=true;
       q.push(cell{a.row,a.column+1,a.t+1});
     }
-
     q.pop();
-
   }
 
   while(cat.size()){

@@ -19,3 +19,11 @@ read_line(Stream, L) :-
     atomic_list_concat(Atoms, ' ', Atom),
     maplist(atom_number, Atoms, L).
 
+
+%occurrences_of_var(2,C,X).
+%thelw na ftiaksw mia lista pou tha kanei occur_var kai 
+%tha exei se kathe thesi poses fores emfanistike h kathe metavliti
+
+
+dosomething([]).
+dosomething([H|T]) :- process(H), dosomething(T).
