@@ -50,11 +50,12 @@ fib(X,Res) :- X = 1, Res is 1.
 fib(X,Res) :- X > 1,
     NewX is X - 1,
     NewX2 is X - 1,
-    fib(NewX,NR),
+    fib(NewX,NR).
     
 
 
-
+diff(X,Y):-
+    X <> Y.
 
 
 

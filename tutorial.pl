@@ -1,40 +1,36 @@
 
 %prolog scripts runs as: consult('test.pl').
 
-loves(romeo, juliet).
-%a fact that means romeo loves juliet
+parent(john, nick). parent(john, ann). parent(helen, nick).
+parent(helen, ann). parent(nick, mary). parent(nick, bill).
+parent(margaret, mary). parent(margaret, bill). parent(mary, george).
+parent(mary, jack). parent(mary, alice). parent(bill, peter).
+parent(chris, paul). parent(ann, paul). parent(paul, sophie).
+
+grandparent(X, Z) :- parent(X, Y), parent(Y, Z).
+
+male(john). male(nick).
+male(bill). male(george).
+male(jack). male(peter).
+male(chris). male(paul).
+female(helen). female(margaret).
+female(mary). female(alice).
+female(ann). female(sophie).
 
 
-loves(juliet, romeo) :- loves(romeo ,juliet).
-%afto einai ena rule to opoio mas leei
-%oti o juliet loves romeo  dinei oti o 
-%romeo loves julietg
+father(X, Y) :- male(X), parent(X, Y).
+sister(X, Y) :- female(X), parent(Z, X), parent(Z, Y).
 
-happy(albert). 
-happy(alice).
-happy(bob).
-with_albert(alice).
+%anadromi
+ancestor(X, Z) :- parent(X, Z).
+ancestor(X, Z) :- parent(X, Y), ancestor(Y, Z).
 
-%o albert runs if albert happy
-%same as if 
-runs(albert) :- 
-    happy(albert).
+% %member 
+% member(X,[X|_]).
+% member(X,[_|L]):- member(X,L).
 
+% %append 
+% append(_,L,L).
+% append([X|L1], L2, [X|L3]):- append(L1,L2,L3).
 
-%comma " , " einai san AND
-dances(alice) :-
-    happy(alice),
-    with_albert(alice).
-
-
-does_alice_dance :- dances(alice),
-    write('When alice is happy and with albert she dances').  
-
-near_water :- true.
-
-swims(bob) :-
-    happy(bob).
-
-swims(bill):-
-    near_water(bill).
-
+triangle(point(2,-1),point(0,7),point(3,10)).
