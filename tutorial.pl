@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 %prolog scripts runs as: consult('test.pl').
 
@@ -34,3 +35,17 @@ ancestor(X, Z) :- parent(X, Y), ancestor(Y, Z).
 % append([X|L1], L2, [X|L3]):- append(L1,L2,L3).
 
 triangle(point(2,-1),point(0,7),point(3,10)).
+=======
+%ena paixnidaki p madeueui enan arithmo
+guess_num :- loop(start).
+
+loop(15) :-write('You guess it').
+
+loop(X):-
+    X \= 15,
+    write('guess number '),
+    read(Guess),
+    write(Guess),
+    write(' is not the number, Try again.'), nl,
+    loop(Guess).
+>>>>>>> b3f9c0b978c2d5640de0a82a318229fd8405d9b8

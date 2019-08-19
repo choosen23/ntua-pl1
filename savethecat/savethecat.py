@@ -1,145 +1,117 @@
 import sys
 
+filename = sys.argv[1]
+f = open(filename, "r")
+f = f.read()
+map = []
+line = []
+for x in f:
+    if x!='\n':
+        line.append(x)
+    else:
+        map.append(line)
+        line = []
 
-grid = []
-depth = {}
-griddeathTime = [] #-1 int
-gridcatTime = []    #-1 int
-gridSymbol = []
-gridSeq = []
-gridVisited = [] # 0 false
-gridcatVisited = [] #0 balse
+# map is a 2d list
 
-
-with open(sys.argv[1], 'r') as infile:
-    grid = infile.readlines()
-
-grid = [(list(line.strip('\n'))) for line in grid]
-N, M = len(grid), len(grid[0])
-
-#other grid initializations
-griddeathTime = [[-1 for i in range(M)] for j in range(N)] 
-gridcatTime = [[-1 for i in range(M)] for j in range(N)] 
-gridSymbol = [[' ' for i in range(M)] for j in range(N)] 
-gridSeq = [[' ' for i in range(M)] for j in range(N)] 
-gridVisited = [[False for i in range(M)] for j in range(N)] 
-gridcatVisited = [[False for i in range(M)] for j in range(N)] 
-
-
-print(grid,N,M)
-
-import queue
-
-q = queue.Queue()
-cat = queue.Queue()
-solutions = queue.Queue()
-
-
-
-
-
+N = len(map)
+M = len(map[0])
+frontier = []
+level = dict()
+cat = (-1, -1)
 for i in range(N):
     for j in range(M):
-        if grid[i][j] == 'X':
-            gridSymbol[i][j] = 'X'
-        elif grid[i][j] == 'W':
-            q.put((i,j,0))
-            gridcatTime[i][j] = 0
-            gridVisited = True
+        if map[i][j] == 'W':
+            frontier.append((i, j))
+            level[(i, j)] = 0
+        if map[i][j] == 'A':
+            cat = (i, j)
 
-        elif grid[i][j] == 'A':
-            gridSymbol[i][j] = '.'
-            gridcatTime[i][j] = 0
-            gridSeq[i][j] = 's'
-            gridcatVisited = True
-            cat.put((i,j,0))
+i = 1
+while frontier:
+    next = []
+    for u in frontier:
+        if u[0] < N-1 and (u[0]+1, u[1]) not in level and map[u[0]+1][u[1]] != 'X': #down
+            level[(u[0]+1, u[1])] = i
+            next.append((u[0]+1, u[1]))
+        if u[1] > 0 and (u[0], u[1]-1) not in level and map[u[0]][u[1]-1] != 'X': #left
+            level[(u[0], u[1]-1)] = i
+            next.append((u[0], u[1]-1))
+        if u[1] < M-1 and (u[0], u[1]+1) not in level and map[u[0]][u[1]+1] != 'X': #right
+            level[(u[0], u[1]+1)] = i
+            next.append((u[0], u[1]+1))
+        if u[0] > 0 and (u[0]-1, u[1]) not in level and map[u[0]-1][u[1]] != 'X': #up
+            level[(u[0]-1, u[1])] = i
+            next.append((u[0]-1, u[1]))
+    frontier = list(next)
+    i += 1
 
-maxTime = 0
-while (not(q.empty())):
-    print("haha")
-    take = q.get()
-    maxTime = take[2]
-    print(maxTime)
-    if take[0] > 0 and gridSymbol[take[0]-1][take[1]] == '.' and not(gridVisited[take[0]-1][take[1]]):
-        griddeathTime[take[0]-1][take[1]] = take[2]+1
-        gridVisited[take[0]-1][take[1]] = True
-        q.put((take[0]-1,take[1],take[2]+1))
-    
-    elif take[0] < N-1 and gridSymbol[take[0]+1][take[1]] and not gridVisited[rake[0] +1][take[1]] :
-        griddeathTime[take[0] +1][take[1]] = take[2] + 1
-        gridVisited[take[0] +1][take[1]] = True
-        q.put((take[0]+1,take[1],take[2]+1))
-
-    elif take[1] > 0 and gridSymbol[take[0]][take[1] -1] and not gridVisited[take[0]][take[1] -1]:
-        griddeathTime[take[0]][take[1] -1] = take[2] -1
-        gridVisited[take[0]][take[1] -1] = True
-        q.put((take[0],take[1] -1,take[2] +1))
-
-    elif take[1] < M-1 and gridSymbol[take[0]][take[1] +1] and not gridVisited[take[0]][take[1] +1]:
-            griddeathTime[take[0]][take[1] +1] = take[2] +1
-            gridVisited[take[0]][take[1] +1] = True
-            q.put((take[0],take[1] +1,take[2] +1))    
-
-while (not(cat.empty())):  
-    break  
-    print("Hm")
-    take = cat.get()
-    
-
-    if take[0] < N-1 and gridSymbol[take[0]+1][take[1]] == '.' and not gridcatVisited[take[0]+1][take[1]] :
-        gridcatTime[take[0]+1][take[1]] = take[2] + 1
-        gridcatVisited[take[0]+1][take[1]] = True
-        gridSeq[take[0]+1][take[1]] = gridSeq[take[0]][take[1]]+'D' 
-        cat.put((take[0] + 1,take[1],take[2]+1))
-    
-    elif take[1] > 0 and gridSymbol[take[0]][take[1] -1] == '.' and not gridcatVisited[take[0]][take[1] -1] :
-        gridcatTime[take[0]][take[1] -1] = take[2] + 1
-        gridcatVisited[take[0]][take[1] -1] = True
-        gridSeq[take[0]][take[1] -1] =  gridSymbol[take[0]][take[1]] + 'L'
-        cat.put((take[0],take[1] -1,take[2]+1))
-    
-    elif take[1] < M-1 and gridSymbol[take[0]][take[1] + 1] == '.' and not gridVisited[take[0][take[1] +1] :
-        gridcatTime[take[0]][take[1] + 1] = take[2] + 1
-        gridcatVisited[take[0]][take[1] + 1] = True
-        gridSeq[take[0]][take[1] + 1] = gridSeq[take[0]][take[1] + 'R'
-        cat.put((take[0],take[1] +1,take[2]+1))
-
-
-     elif take[0] > 0 and gridSymbol[take[0] -1][take[1]] == '.' and not gridcatVisited[take[0] -1][take[1]] :
-        gridcatTime[take[0] -1][take[1]] = take[2] + 1
-        gridcatVisited[take[0] -1][take[1]] = True
-        gridSeq[take[0] -1][take[1]] = gridSeq[take[0]][take[1]]+'D' 
-        cat.put((take[0] - 1,take[1],take[2]+1))   
-
-
+flood_time = level
 for i in range(N):
     for j in range(M):
-        if gridcatTime[i][j] >= 0:
-            if gridcatTime[i][j] < griddeathTime[i][j] and griddeathTime[i][j] <= maxTime:
-                solutions.put(i,j,griddeathTime[i][j] -1)
-            elif griddeathTime[i][j] == -1 :
-                solutions.put(i,j,-1)
+        if (i, j) not in flood_time and map[i][j] != 'X':
+            flood_time[(i, j)] = 'infinity'
 
-best = solutions.get()
+safetime = dict()
+parent = {cat: (-1, -1)}
+level = {cat: 0}
+max_time = -1
+target = (-1, -1)
+frontier = [cat]
+i = 1
+while frontier:
+    next = []
+    for pos in frontier:
+        if flood_time[pos] == 'infinity':
+            max_time = 'infinity'
+            target = pos
+        elif flood_time[pos] > max_time + 1:
+            max_time = flood_time[pos]-1
+            target = pos
+        down = (pos[0]+1, pos[1])
+        left = (pos[0], pos[1]-1)
+        right = (pos[0], pos[1]+1)
+        up = (pos[0]-1, pos[1])
+        if (down not in level and down[0] < N and map[down[0]][down[1]] != 'X' and
+            (flood_time[down] == 'infinity' or flood_time[down] > i) and max_time != 'infinity'):
+            level[down] = i
+            parent[down] = pos
+            next.append(down)
+        if (left not in level and left[1] >= 0 and map[left[0]][left[1]] != 'X' and
+            (flood_time[left] == 'infinity' or flood_time[left] > i)):
+            level[left] = i
+            parent[left] = pos
+            next.append(left)
+        if (right not in level and right[1] < M and map[right[0]][right[1]] != 'X' and
+            (flood_time[right] == 'infinity' or flood_time[right] > i) and max_time != 'infinity'):
+            level[right] = i
+            parent[right] = pos
+            next.append(right)
+        if (up not in level and up[0] >= 0 and map[up[0]][up[1]] != 'X' and
+            (flood_time[up] =='infinity' or flood_time[up] > i)):
+            level[up] = i
+            parent[up] = pos
+            next.append(up)
+    frontier = list(next)
+    i += 1
 
-while not solutions.empty():
-    tmp = solutions.get()
-    if tmp[2] == best[2]:
-        if tmp[0] < best[0]:
-            best = tmp
-        elif tmp[0] == best[0]:
-            if tmp[1] < best[1]:
-                best = a
-    elif tmp[2] > best[2]:
-        best = tmp
 
-if best[2] == -1: print('infinity')
-elif print(best[2])
-if gridSeq[best[0]][best[1]] == 's': print('stay')
-else: print(gridSeq[best[0]][best[1]]) #kati exei me erase..Na to dw kapia stigmi
-
-
-
-
-
-
+print(max_time)
+if target == cat:
+    print('stay')
+else:
+    ans = ''
+    while parent[target] != (-1, -1):
+        if parent[target][0] == target[0]-1:
+            ans = 'D' + ans
+            target = parent[target]
+        elif parent[target][0] == target[0]+1:
+            ans = 'U' + ans
+            target = parent[target]
+        elif parent[target][1] == target[1]-1:
+            ans = 'R' + ans
+            target = parent[target]
+        elif parent[target][1] == target[1]+1:
+            ans = 'L' + ans
+            target = parent[target]
+    print(ans)

@@ -9,25 +9,10 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 
-
-
-public class Grid {
-    int death_time=-1;
-    int cat_time=-1;
-    char symbol;
-    string seq;
-    bool visited=false;
-    bool cat_visit=false;
-}
-
-
-
-
-public class SaveTheCat {
+public class Savethecat {
 
   public static void main (String[] args) throws Exception {
-    //Diavasmata  
-    FileReader fileReader = new FileReader(args[0]);
+	  FileReader fileReader = new FileReader(args[0]);
       BufferedReader bufferedReader = new BufferedReader(fileReader);
       List<char []> lines = new ArrayList<char []>();
       String line = null;
@@ -41,13 +26,12 @@ public class SaveTheCat {
           N++;
       }
       bufferedReader.close();
-      //End diavasmata
       char[][] grid = lines.toArray(new char[lines.size()][]);
-     
       Queue<Point> q = new LinkedList<>();
-      Queue<Point> cat = new LinkedList<>();
-      Queue<
-     
+      Queue<Point> stars = new LinkedList<>();
+
+      int[][] depth = new int[1000][1000];
+
 
       for (int i = 0; i < N; i++) {
     	  for (int j = 0; j < M; j++) {
@@ -60,14 +44,16 @@ public class SaveTheCat {
       }
 
 
-
-      // print grid
+          // print grid
       for (int i = 0; i < N; i++) {
     	  for (int j = 0; j < M; j++) {
     	  System.out.print(grid[i][j]);
     	  }
     	  System.out.println();
       }
+
+
+
 
 
 
