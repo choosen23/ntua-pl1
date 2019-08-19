@@ -90,7 +90,7 @@ while (not(cat.empty())):
         gridcatTime[take[0]+1][take[1]] = take[2] + 1
         gridcatVisited[take[0]+1][take[1]] = True
         gridSeq[take[0]+1][take[1]] = gridSeq[take[0]][take[1]]+'D' 
-        cat.put((take[0] + 1,take[1],take[2]+1)
+        cat.put((take[0] + 1,take[1],take[2]+1))
     
     elif take[1] > 0 and gridSymbol[take[0]][take[1] -1] == '.' and not gridcatVisited[take[0]][take[1] -1] :
         gridcatTime[take[0]][take[1] -1] = take[2] + 1
