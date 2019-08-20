@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 %ena paixnidaki p madeueui enan arithmo
 guess_num :- loop(start).
 
@@ -10,3 +12,4 @@ loop(X):-
     write(Guess),
     write(' is not the number, Try again.'), nl,
     loop(Guess).
+>>>>>>> b3f9c0b978c2d5640de0a82a318229fd8405d9b8

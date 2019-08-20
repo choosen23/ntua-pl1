@@ -27,8 +27,10 @@ for i in range(N):
         if map[i][j] == 'A':
             cat = (i, j)
 
-
 i = 1
+print(frontier)
+print(level)
+
 while frontier:
     next = []
     for u in frontier:
@@ -44,15 +46,20 @@ while frontier:
         if u[0] > 0 and (u[0]-1, u[1]) not in level and map[u[0]-1][u[1]] != 'X': #up
             level[(u[0]-1, u[1])] = i
             next.append((u[0]-1, u[1]))
+    print("next")
+    print(next)
+    print("frontier")
+    print(frontier)
+    print("X")
     frontier = list(next)
     i += 1
 
-print(level)
-print('x')
+
+print(frontier)
+print("~~")
+
 
 flood_time = level
-print(flood_time)
-
 for i in range(N):
     for j in range(M):
         if (i, j) not in flood_time and map[i][j] != 'X':
@@ -65,7 +72,6 @@ max_time = -1
 target = (-1, -1)
 frontier = [cat]
 i = 1
-
 while frontier:
     next = []
     for pos in frontier:
