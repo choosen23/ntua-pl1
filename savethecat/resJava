@@ -1,0 +1,32 @@
+next
+[java.awt.Point[x=0,y=4], java.awt.Point[x=0,y=4]]
+frontier
+[]
+X
+next
+[java.awt.Point[x=0,y=5]]
+frontier
+[java.awt.Point[x=0,y=5]]
+X
+next
+[java.awt.Point[x=0,y=4]]
+frontier
+[java.awt.Point[x=0,y=4]]
+X
+next
+[]
+frontier
+[java.awt.Point[x=0,y=5]]
+X
+next
+[]
+frontier
+[]
+X
+x
+{java.awt.Point[x=0,y=4]=1, java.awt.Point[x=0,y=4]=1, java.awt.Point[x=0,y=3]=0, java.awt.Point[x=0,y=4]=2, java.awt.Point[x=0,y=4]=3}
+x
+...W..
+.A.XX.
+XX.X..
+.....X

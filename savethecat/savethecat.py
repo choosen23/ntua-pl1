@@ -28,6 +28,8 @@ for i in range(N):
             cat = (i, j)
 
 i = 1
+print(frontier)
+print(level)
 
 while frontier:
     next = []
@@ -57,6 +59,8 @@ while frontier:
     print(i)
 
 
+print(frontier)
+print("~~")
 
 
 flood_time = level
