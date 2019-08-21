@@ -55,60 +55,31 @@ public class Savethecat {
       int k = 1;
 
       while(!frontier.isEmpty()) {
-        next.clear();
-        Point p = new Point();
-        p = frontier.remove();
+        Point p = frontier.remove();
         int u = (int)p.getX();
         int v = (int)p.getY();
+
+
        // System.out.println(p);
 
-        
+       ArrayList<Point> next = new ArrayList<Point>();
 
-        //down
+       if (u < N-1 && grid[ u+1][v] != 'X' ) next.add( new Point(u+1,v));
+       if (v > 0 && grid[u][v-1] != 'X' ) next.add( new Point(u,v-1));
+       if (v < M-1 && grid[u][v+1] != 'X') next.add( new Point(u,v+1));
+       if (u > 0 && grid[u-1][v] != 'X' ) next.add( new Point(u-1,v));
 
-        p.setLocation(u+1,v);
-        if (u < N-1 && !levelsHashMap.containsKey(p) && (grid[u+1][v] != 'X') ) {
-                levelsHashMap.put(p,k);
-                next.add(p);
-        }
+       for (Point qq: next) {
+           int i = qq.x;
+           int j = qq.y;
 
-        //left
-        if (v > 0) {
-            p.setLocation(u,v-1);
-            if (  !levelsHashMap.containsKey(p) && (grid[u][v-1] != 'X') ) {
-                levelsHashMap.put(p, k);
-                next.add(p);
-            }
-        }
-        //right
-        if (v < M-1) {
-            p.setLocation(u,v+1);
-            if (  !levelsHashMap.containsKey(p) && (grid[u][v+1] != 'X') ) {
-                levelsHashMap.put(p,k);
-                next.add(p);
-            }
-        }
-        //up
-        if (u > 0) {
-            p.setLocation(u-1,v);
-            if ( !levelsHashMap.containsKey(p) && (grid[u-1][v] != 'X') ) {
-                levelsHashMap.put(p,k);
-                next.add(p);
-            }
-        }
-        System.out.println("next");
-        System.out.println(next);
-        System.out.println("frontier");
-        System.out.println(frontier);
-        System.out.println("X");
+           if (grid[u][v] == grid[i][j]) continue;
+           else if (grid[i][j] == '.') {
+            levelsHashMap.put((i,j), k)   
+           }
+           } 
 
-        for(int j=0; j<next.size(); j++) {
-            Point tmp = new Point();
-            tmp = next.get(j);
-            frontier.add(tmp);
-        }
-        k++;
-      }
+       }
 
      
       System.out.println('x');
@@ -121,6 +92,51 @@ public class Savethecat {
 
 
 
+
+    //     //down
+    //     p.setLocation(u+1,v);
+    //     if (u < N-1 && !levelsHashMap.containsKey(p) && (grid[u+1][v] != 'X') ) {
+    //             levelsHashMap.put(p,k);
+    //             next.add(p);
+    //     }
+
+    //     //left
+    //     if (v > 0) {
+    //         p.setLocation(u,v-1);
+    //         if (  !levelsHashMap.containsKey(p) && (grid[u][v-1] != 'X') ) {
+    //             levelsHashMap.put(p, k);
+    //             next.add(p);
+    //         }
+    //     }
+    //     //right
+    //     if (v < M-1) {
+    //         p.setLocation(u,v+1);
+    //         if (  !levelsHashMap.containsKey(p) && (grid[u][v+1] != 'X') ) {
+    //             levelsHashMap.put(p,k);
+    //             next.add(p);
+    //         }
+    //     }
+    //     //up
+    //     if (u > 0) {
+    //         p.setLocation(u-1,v);
+    //         if ( !levelsHashMap.containsKey(p) && (grid[u-1][v] != 'X') ) {
+    //             levelsHashMap.put(p,k);
+    //             next.add(p);
+    //         }
+    //     }
+    //     System.out.println("next");
+    //     System.out.println(next);
+    //     System.out.println("frontier");
+    //     System.out.println(frontier);
+    //     System.out.println("X");
+
+    //     for(int j=0; j<next.size(); j++) {
+    //         Point tmp = new Point();
+    //         tmp = next.get(j);
+    //         frontier.add(tmp);
+    //     }
+    //     k++;
+    //   }
 
 
 
