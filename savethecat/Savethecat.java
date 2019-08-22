@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.awt.Point;
 import java.util.*;
 
@@ -26,7 +25,6 @@ public class Savethecat {
         char[][] grid = lines.toArray(new char[lines.size()][]);
         HashMap<Point, Integer> levelsHashMap = new HashMap<Point, Integer>();
         LinkedList<Point> frontier = new LinkedList<Point>();
-
         Point cat = new Point(-1, -1);
 
         for (int i = 0; i < N; i++) {
@@ -43,13 +41,10 @@ public class Savethecat {
 
         LinkedList<Point> next = new LinkedList<Point>();
         int k = 1;
-        ListIterator listIter = frontier.listIterator(0);
 
         while (!frontier.isEmpty()) {
-
             next.removeAll(next);
-
-            while (listIter.hasNext()) {
+            while (!frontier.isEmpty()) {
                 Point p = frontier.remove();
                 int u = (int) p.getX();
                 int v = (int) p.getY();
@@ -92,12 +87,6 @@ public class Savethecat {
             k++;
         }
         System.gc();
-        // System.out.println(frontier);
-        // System.out.println("~");
-        // System.out.println(next);
-        // System.out.println("~");
-        // System.out.println(levelsHashMap);
-        // System.out.println("~");
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
@@ -118,17 +107,15 @@ public class Savethecat {
         frontier.removeAll(frontier);
         frontier.add(cat);
         int i = 1;
-        listIter = frontier.listIterator(0);
-
-        System.out.println(levelsHashMap.size());
 
         while (!frontier.isEmpty()) {
+
             next.removeAll(next);
-            while (!listIter.hasNext()) {
+
+            while (!frontier.isEmpty()) {
                 Point p = frontier.remove();
                 int u = (int) p.getX();
                 int v = (int) p.getY();
-
                 if (levelsHashMap.get(p) == Integer.MIN_VALUE) {
                     maxTime = Integer.MIN_VALUE;
                     Target = p;
@@ -136,34 +123,33 @@ public class Savethecat {
                     maxTime = levelsHashMap.get(p) - 1;
                     Target = p;
                 }
+
                 Point Down = new Point(u + 1, v);
                 Point Left = new Point(u, v - 1);
                 Point Right = new Point(u, v + 1);
                 Point Up = new Point(u - 1, v);
 
-                if (!level.containsKey(Down) && Down.getX() < N && grid[ (int)Down.getX() ][ (int) Down.getY() ] != 'X'
-                        && ( levelsHashMap.get(Down) == Integer.MIN_VALUE || levelsHashMap.get(Down) > i)
+                if (!level.containsKey(Down) && Down.getX() < N && grid[(int) Down.getX()][(int) Down.getY()] != 'X'
+                        && (levelsHashMap.get(Down) == Integer.MIN_VALUE || levelsHashMap.get(Down) > i)
                         && maxTime != Integer.MIN_VALUE) {
                     level.put(Down, i);
                     parent.put(Down, p);
                     next.add(Down);
                 }
-                if (!levelsHashMap.containsKey(Left) && Left.getY() >= 0
-                        && grid[(int)Left.getX()][(int)Left.getY()] != 'X'
+                if (!level.containsKey(Left) && Left.getY() >= 0 && grid[(int) Left.getX()][(int) Left.getY()] != 'X'
                         && (levelsHashMap.get(Left) == Integer.MIN_VALUE || levelsHashMap.get(Left) > i)) {
                     level.put(Left, i);
                     parent.put(Left, p);
                     next.add(Left);
                 }
-                if (!levelsHashMap.containsKey(Right) && Right.getY() < M
-                        && grid[(int)Right.getX()][(int)Right.getY()] != 'X'
+                if (!level.containsKey(Right) && Right.getY() < M && grid[(int) Right.getX()][(int) Right.getY()] != 'X'
                         && (levelsHashMap.get(Right) == Integer.MIN_VALUE || levelsHashMap.get(Right) > i)
                         && maxTime != Integer.MIN_VALUE) {
                     level.put(Right, i);
                     parent.put(Right, p);
                     next.add(Right);
                 }
-                if (!levelsHashMap.containsKey(Up) && Up.getX() >= 0 && grid[(int) Up.getX()][(int) Up.getY()] != 'X'
+                if (!level.containsKey(Up) && Up.getX() >= 0 && grid[(int) Up.getX()][(int) Up.getY()] != 'X'
                         && (levelsHashMap.get(Up) == Integer.MIN_VALUE || levelsHashMap.get(Up) > i)) {
                     level.put(Up, i);
                     parent.put(Up, p);
@@ -174,11 +160,8 @@ public class Savethecat {
             frontier.addAll(next);
             i++;
         }
+        System.gc();
 
-
-
-
-        
         if (maxTime == Integer.MIN_VALUE)
             System.out.println("infinity");
         else
@@ -190,27 +173,23 @@ public class Savethecat {
             System.out.println("stay");
         else {
             String ans = " ";
-            while (parent.get(Target) != tr) {
-                if (parent.get(Target).getX() == Target.getX() - 1) {
+            while (!parent.get(Target).equals(tr)) {
+                if ((int) parent.get(Target).getX() == (int) Target.getX() - 1) {
                     ans = 'D' + ans;
                     Target = parent.get(Target);
-                } else if (parent.get(Target).getY() == Target.getY() + 1) {
-                    ans = 'U' + ans;
+                } else if ((int) parent.get(Target).getY() == (int) Target.getY() + 1) {
+                    ans = 'L' + ans;
                     Target = parent.get(Target);
-                } else if (parent.get(Target).getY() == Target.getY() - 1) {
+                } else if ((int) parent.get(Target).getY() == (int) Target.getY() - 1) {
                     ans = 'R' + ans;
                     Target = parent.get(Target);
-                } else if (parent.get(Target).getX() == Target.getX() + 1) {
+                } else if ((int) parent.get(Target).getX() == (int) Target.getX() + 1) {
                     ans = 'U' + ans;
                     Target = parent.get(Target);
                 }
-
             }
-
             System.out.println(ans);
-
+            System.gc();
         }
-
     }
-
 }

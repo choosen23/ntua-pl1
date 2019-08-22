@@ -28,7 +28,7 @@ for i in range(N):
             cat = (i, j)
 
 i = 1
-print(frontier)
+
 while frontier:
     next = []
     for u in frontier:
@@ -79,9 +79,7 @@ target = (-1, -1)
 frontier = [cat]
 i = 1
 
-print(len(flood_time))
 
-print(len(level))
 
 while frontier:
     next = []
@@ -92,6 +90,7 @@ while frontier:
         elif flood_time[pos] > max_time + 1:
             max_time = flood_time[pos]-1
             target = pos
+
         down = (pos[0]+1, pos[1])
         left = (pos[0], pos[1]-1)
         right = (pos[0], pos[1]+1)
@@ -119,6 +118,7 @@ while frontier:
     frontier = list(next)
     i += 1
 
+print(parent)
 
 print(max_time)
 if target == cat:
@@ -126,6 +126,7 @@ if target == cat:
 else:
     ans = ''
     while parent[target] != (-1, -1):
+        print(target)
         if parent[target][0] == target[0]-1:
             ans = 'D' + ans
             target = parent[target]
