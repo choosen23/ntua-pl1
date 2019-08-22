@@ -28,6 +28,7 @@ for i in range(N):
             cat = (i, j)
 
 i = 1
+print(frontier)
 while frontier:
     next = []
     for u in frontier:
@@ -43,9 +44,16 @@ while frontier:
         if u[0] > 0 and (u[0]-1, u[1]) not in level and map[u[0]-1][u[1]] != 'X': #up
             level[(u[0]-1, u[1])] = i
             next.append((u[0]-1, u[1]))
+
+    
     frontier = list(next)
     i += 1
-    
+    # print("f")
+    # print(frontier)
+    # print("n")
+    # print(next)
+    # print("lev")
+    # print(len(level))  
 
 
 # print(frontier)
@@ -65,13 +73,16 @@ for i in range(N):
 
 safetime = dict()
 parent = {cat: (-1, -1)}
-print(parent)
 level = {cat: 0}
-print(level)
 max_time = -1
 target = (-1, -1)
 frontier = [cat]
 i = 1
+
+print(len(flood_time))
+
+print(len(level))
+
 while frontier:
     next = []
     for pos in frontier:
