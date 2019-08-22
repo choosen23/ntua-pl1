@@ -2,12 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.*;
-
-
-
-
 
 public class Savethecat {
 
@@ -35,7 +30,7 @@ public class Savethecat {
         // Queue<Point> stars = new LinkedList<>();
 
         // omoia me to level = dict()
-        HashMap<Point, Point> levelsHashMap = new HashMap<Point, Point>();
+        HashMap<Point, Integer> levelsHashMap = new HashMap<Point, Integer>();
 
         // to append stin python kanei sinxoneusi sto telos tin listas
         // omoia me to frontier
@@ -47,7 +42,7 @@ public class Savethecat {
             for (int j = 0; j < M; j++) {
                 if (grid[i][j] == 'W') {
                     frontier.add(new Point(i, j));
-                    levelsHashMap.put(new Point(i, j), new Point(0,0));
+                    levelsHashMap.put(new Point(i, j), 0);
                 }
                 if (grid[i][j] == 'A') {
                     cat = new Point(i, j);
@@ -55,102 +50,171 @@ public class Savethecat {
             }
         }
 
-
-        
         LinkedList<Point> next = new LinkedList<Point>();
-
         int k = 1;
-        // System.out.println(frontier);
 
         while (!frontier.isEmpty()) {
 
             next.removeAll(next);
-            
-            // System.out.println(frontier);
+
             while (!frontier.isEmpty()) {
                 Point p = frontier.remove();
                 int u = (int) p.getX();
                 int v = (int) p.getY();
-                Point ff = new Point(k,0);
-                // System.out.println(p);
-                System.out.println("vgike");
-                System.out.println(p);
-                System.out.println("menei");
-                System.out.println(frontier);
+
                 // down
-                if (u < N - 1) { //deutero point == 1 
-                    p.setLocation(u + 1, v);
-                    ff.setLocation(k, 1);
-                    System.out.println("down");
-                    System.out.println(p);
-                    System.out.println("-");
-                    if (!levelsHashMap.containsKey(p) && (grid[u + 1][v] != 'X')) {
-                        levelsHashMap.put(p, ff);
-                        next.add(p);
+                if (u < N - 1) { // deutero point == 1
+                    Point l = new Point(u + 1, v);
+                    if (!levelsHashMap.containsKey(l) && (grid[u + 1][v] != 'X')) {
+                        levelsHashMap.put(l, k);
+                        next.add(l);
                     }
                 }
                 // left
-                if (v > 0) { //deutero point == 2
-                    p.setLocation(u, v - 1);
-                    ff.setLocation(k, 2);
-                    System.out.println("left");
-                    System.out.println(p);
-                    System.out.println("-");
-                    if (!levelsHashMap.containsKey(p) && (grid[u][v - 1] != 'X')) {
-                        System.out.println("pireleft");
-                        System.out.println(u);
-                        System.out.println(v);
-                        levelsHashMap.put(p, ff);
-                        next.add(p);
+                if (v > 0) {
+                    Point m = new Point(u, v - 1);
+                    if (!levelsHashMap.containsKey(m) && (grid[u][v - 1] != 'X')) {
+                        levelsHashMap.put(m, k);
+                        next.add(m);
                     }
                 }
-                System.out.println(next);
                 // right
-                if (v < M - 1) { //deutero point == 3
-                    p.setLocation(u, v + 1);
-                    ff.setLocation(k, 3);
-                    System.out.println("right");
-                    System.out.println(p);
-                    System.out.println("-");
-                    if (!levelsHashMap.containsKey(p) && (grid[u][v + 1] != 'X')) {
-                        System.out.println("pireright");
-                        System.out.println(u);
-                        System.out.println(v+1);
-                        levelsHashMap.put(p, ff);
-                        next.add(p);
+                if (v < M - 1) {
+                    Point n = new Point(u, v + 1);
+                    if (!levelsHashMap.containsKey(n) && (grid[u][v + 1] != 'X')) {
+                        levelsHashMap.put(n, k);
+                        next.add(n);
                     }
                 }
-                System.out.println(next);
                 // up
-                if (u > 0) { //deutero point == 4
-                    p.setLocation(u - 1, v);
-                    ff.setLocation(k, 4);
-                    System.out.println("up");
-                    System.out.println(p);
-                    System.out.println("-");
-                    if (!levelsHashMap.containsKey(p) && (grid[u - 1][v] != 'X')) {
-                        levelsHashMap.put(p, ff);
-                        next.add(p);
+                if (u > 0) {
+                    Point o = new Point(u - 1, v);
+                    if (!levelsHashMap.containsKey(o) && (grid[u - 1][v] != 'X')) {
+                        levelsHashMap.put(o, k);
+                        next.add(o);
                     }
                 }
-
             }
-
             frontier.addAll(next);
-            System.out.println("uparxei");
-            System.out.println(frontier);
-
-            System.out.println("uparxei");
-            System.out.println(levelsHashMap);
             k++;
         }
+        System.gc();
+        // System.out.println(frontier);
+        // System.out.println("~");
+        // System.out.println(next);
+        // System.out.println("~");
+        // System.out.println(levelsHashMap);
+        // System.out.println("~");
 
-        // print grid
+        // HashMap<Point,Integer> floodTime = new HashMap<Point,Integer>();
+
+        // infinity == MIN_VALUE
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                System.out.print(grid[i][j]);
+                Point p = new Point(i, j);
+                if (!levelsHashMap.containsKey(p) && grid[i][j] != 'X') {
+                    levelsHashMap.put(p, Integer.MIN_VALUE);
+                }
             }
-            System.out.println();
+        }
+        System.gc();
+
+        HashMap<Point, Integer> safeTime = new HashMap<Point, Integer>();
+        HashMap<Point, Point> parent = new HashMap<Point, Point>();
+        parent.put(cat, new Point(-1, -1));
+        HashMap<Point, Integer> level = new HashMap<Point, Integer>();
+        level.put(cat, 0);
+        int maxTime = -1;
+        Point Target = new Point(-1, -1);
+        frontier.removeAll(frontier);
+        frontier.add(cat);
+        int i = 1;
+
+        while (!frontier.isEmpty()) {
+            next.removeAll(next);
+            while (!frontier.isEmpty()) {
+                Point p = frontier.remove();
+                int u = (int) p.getX();
+                int v = (int) p.getY();
+
+                if (levelsHashMap.get(p) == Integer.MIN_VALUE) {
+                    maxTime = Integer.MIN_VALUE;
+                    Target = p;
+                } else if (levelsHashMap.get(p) > maxTime + 1) {
+                    maxTime = levelsHashMap.get(p) - 1;
+                    Target = p;
+                }
+                Point Down = new Point(u + 1, v);
+                Point Left = new Point(u, v - 1);
+                Point Right = new Point(u, v + 1);
+                Point Up = new Point(u - 1, v);
+
+                if (!level.containsKey(Down) && Down.getX() < N && grid[(int) Down.getX()][(int) Down.getY()] != 'X'
+                        && (levelsHashMap.get(Down) == Integer.MIN_VALUE || levelsHashMap.get(Down) > i)
+                        && maxTime != Integer.MIN_VALUE) {
+                    level.put(Down, i);
+                    parent.put(Down, p);
+                    next.add(Down);
+                }
+                if (!levelsHashMap.containsKey(Left) && Left.getY() >= 0
+                        && grid[(int) Left.getX()][(int) Left.getY()] != 'X'
+                        && (levelsHashMap.get(Left) == Integer.MIN_VALUE || levelsHashMap.get(Left) > i)) {
+                    level.put(Left, i);
+                    parent.put(Left, p);
+                    next.add(Left);
+                }
+                if (!levelsHashMap.containsKey(Right) && Right.getY() < M
+                        && grid[(int) Right.getX()][(int) Right.getY()] != 'X'
+                        && (levelsHashMap.get(Right) == Integer.MIN_VALUE || levelsHashMap.get(Right) > i)
+                        && maxTime != Integer.MIN_VALUE) {
+                    level.put(Right, i);
+                    parent.put(Right, p);
+                    next.add(Right);
+                }
+                if (!levelsHashMap.containsKey(Up) && Up.getX() >= 0 && grid[(int) Up.getX()][(int) Up.getY()] != 'X'
+                        && (levelsHashMap.get(Up) == Integer.MIN_VALUE || levelsHashMap.get(Up) > i)) {
+                    level.put(Up, i);
+                    parent.put(Up, p);
+                    next.add(Up);
+                }
+
+            }
+            frontier.addAll(next);
+            k++;
+        }
+        if (maxTime == Integer.MIN_VALUE)
+            System.out.println("infinity");
+        else
+            System.out.println(maxTime);
+
+        Point tr = new Point(-1, -1);
+
+        if (Target == cat)
+            System.out.println("stay");
+        else {
+            String ans = " ";
+            while (parent.get(Target) != tr) {
+                if (parent.get(Target).getX() == Target.getX() - 1) {
+                    ans = 'D' + ans;
+                    Target = parent.get(Target);
+                }
+                else if (parent.get(Target).getY() == Target.getY() + 1) {
+                    ans = 'U' + ans;
+                    Target = parent.get(Target);
+                }
+                else if (parent.get(Target).getY() == Target.getY() - 1) {
+                    ans = 'R' + ans;
+                    Target = parent.get(Target);
+                }
+                else if (parent.get(Target).getX() == Target.getX() + 1) {
+                    ans = 'U' + ans;
+                    Target = parent.get(Target);
+                }
+
+            }
+
+            System.out.println(ans);
+
         }
 
     }
