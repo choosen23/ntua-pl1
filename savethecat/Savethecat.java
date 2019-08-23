@@ -1,21 +1,25 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.awt.Point;
 import java.util.*;
+import java.lang.*;
 
 public class Savethecat {
+    
 
     public static void main(String[] args) throws Exception {
+        
+        //long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+
         FileReader fileReader = new FileReader(args[0]);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         List<char[]> lines = new ArrayList<char[]>();
         String line = null;
-        int N = 0;
-        int M = 0;
+        long N = 0;
+        long M = 0;
         while ((line = bufferedReader.readLine()) != null) {
             if (N == 0) {
-                M = (int) line.length();
+                M = (long) line.length();
             }
             lines.add(line.toCharArray());
             N++;
@@ -24,21 +28,16 @@ public class Savethecat {
         // Telos diavasmata
 
         char[][] grid = lines.toArray(new char[lines.size()][]);
-
-
-        // omoia me to level = dict()
-        HashMap<Point, Integer> levelsHashMap = new HashMap<Point, Integer>();
-
-        // to append stin python kanei sinxoneusi sto telos tin listas
-        // omoia me to frontier
+        HashMap<Point,  Long> levelsHashMap = new HashMap<Point,  Long>();
         LinkedList<Point> frontier = new LinkedList<Point>();
-
         Point cat = new Point(-1, -1);
+        Long zero = 0;
+        
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (grid[i][j] == 'W') {
                     frontier.add(new Point(i, j));
-                    levelsHashMap.put(new Point(i, j), 0);
+                    levelsHashMap.put(new Point(i, j), zero );
                 }
                 if (grid[i][j] == 'A') {
                     cat = new Point(i, j);
@@ -46,15 +45,15 @@ public class Savethecat {
             }
         }
         LinkedList<Point> next = new LinkedList<Point>();
-        int k = 1;
+        long k = 1;
         while (!frontier.isEmpty()) {
             next.removeAll(next);
             while (!frontier.isEmpty()) {
                 Point p = frontier.remove();
-                int u = (int) p.getX();
-                int v = (int) p.getY();
+                long u = (long) p.getX();
+                long v = (long) p.getY();
                 // down
-                if (u < N - 1) { // deutero point == 1
+                if (u < N - 1) {
                     Point l = new Point(u + 1, v);
                     if (!levelsHashMap.containsKey(l) && (grid[u + 1][v] != 'X')) {
                         levelsHashMap.put(l, k);
@@ -85,89 +84,74 @@ public class Savethecat {
                         next.add(o);
                     }
                 }
+
             }
             frontier.addAll(next);
             k++;
         }
         System.gc();
-        System.out.println(frontier);
-        System.out.println("~");
-        System.out.println(next);
-        System.out.println("~");
-       for (Map.Entry<Point,Integer> entry : levelsHashMap.entrySet() ) {
-            System.out.print( entry.getKey());
-            System.out.print( "  ,  ");
-            System.out.println(entry.getValue());
-            
-        }
-        System.out.println("~");
 
-        // HashMap<Point,Integer> floodTime = new HashMap<Point,Integer>();
-
-        // infinity == MIN_VALUE
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 Point p = new Point(i, j);
                 if (!levelsHashMap.containsKey(p) && grid[i][j] != 'X') {
-                    levelsHashMap.put(p, Integer.MIN_VALUE);
+                    levelsHashMap.put(p,  Long.MIN_VALUE);
                 }
             }
         }
         System.gc();
 
         HashMap<Point, Point> parent = new HashMap<Point, Point>();
+        HashMap<Point,  Long> level = new HashMap<Point,  Long>();
         parent.put(cat, new Point(-1, -1));
-        HashMap<Point, Integer> level = new HashMap<Point, Integer>();
         level.put(cat, 0);
-        int maxTime = -1;
+        long maxTime = -1;
         Point Target = new Point(-1, -1);
         frontier.removeAll(frontier);
         frontier.add(cat);
-        int i = 1;
+        long i = 1;
 
         while (!frontier.isEmpty()) {
             next.removeAll(next);
             while (!frontier.isEmpty()) {
                 Point p = frontier.remove();
-                int u = (int) p.getX();
-                int v = (int) p.getY();
-
-                if (levelsHashMap.get(p) == Integer.MIN_VALUE) {
-                    maxTime = Integer.MIN_VALUE;
+                long u = (long) p.getX();
+                long v = (long) p.getY();
+                if (levelsHashMap.get(p) ==  Long.MIN_VALUE) {
+                    maxTime =  Long.MIN_VALUE;
                     Target = p;
                 } else if (levelsHashMap.get(p) > maxTime + 1) {
                     maxTime = levelsHashMap.get(p) - 1;
                     Target = p;
                 }
+
                 Point Down = new Point(u + 1, v);
                 Point Left = new Point(u, v - 1);
                 Point Right = new Point(u, v + 1);
                 Point Up = new Point(u - 1, v);
 
-                if (!level.containsKey(Down) && Down.getX() < N && grid[(int) Down.getX()][(int) Down.getY()] != 'X'
-                        && (levelsHashMap.get(Down) == Integer.MIN_VALUE || levelsHashMap.get(Down) > i)
-                        && maxTime != Integer.MIN_VALUE) {
+                if (!level.containsKey(Down) && Down.getX() < N && grid[(long) Down.getX()][(long) Down.getY()] != 'X'
+                        && (levelsHashMap.get(Down) ==  Long.MIN_VALUE || levelsHashMap.get(Down) > i)
+                        && maxTime !=  Long.MIN_VALUE) {
                     level.put(Down, i);
                     parent.put(Down, p);
                     next.add(Down);
                 }
-                if (!levelsHashMap.containsKey(Left) && Left.getY() >= 0
-                        && grid[(int) Left.getX()][(int) Left.getY()] != 'X'
-                        && (levelsHashMap.get(Left) == Integer.MIN_VALUE || levelsHashMap.get(Left) > i)) {
+                if (!level.containsKey(Left) && Left.getY() >= 0 && grid[(long) Left.getX()][(long) Left.getY()] != 'X'
+                        && (levelsHashMap.get(Left) ==  Long.MIN_VALUE || levelsHashMap.get(Left) > i)) {
                     level.put(Left, i);
                     parent.put(Left, p);
                     next.add(Left);
                 }
-                if (!levelsHashMap.containsKey(Right) && Right.getY() < M
-                        && grid[(int) Right.getX()][(int) Right.getY()] != 'X'
-                        && (levelsHashMap.get(Right) == Integer.MIN_VALUE || levelsHashMap.get(Right) > i)
-                        && maxTime != Integer.MIN_VALUE) {
+                if (!level.containsKey(Right) && Right.getY() < M && grid[(long) Right.getX()][(long) Right.getY()] != 'X'
+                        && (levelsHashMap.get(Right) ==  Long.MIN_VALUE || levelsHashMap.get(Right) > i)
+                        && maxTime !=  Long.MIN_VALUE) {
                     level.put(Right, i);
                     parent.put(Right, p);
                     next.add(Right);
                 }
-                if (!levelsHashMap.containsKey(Up) && Up.getX() >= 0 && grid[(int) Up.getX()][(int) Up.getY()] != 'X'
-                        && (levelsHashMap.get(Up) == Integer.MIN_VALUE || levelsHashMap.get(Up) > i)) {
+                if (!level.containsKey(Up) && Up.getX() >= 0 && grid[(long) Up.getX()][(long) Up.getY()] != 'X'
+                        && (levelsHashMap.get(Up) ==  Long.MIN_VALUE || levelsHashMap.get(Up) > i)) {
                     level.put(Up, i);
                     parent.put(Up, p);
                     next.add(Up);
@@ -175,9 +159,11 @@ public class Savethecat {
 
             }
             frontier.addAll(next);
-            k++;
+            i++;
         }
-        if (maxTime == Integer.MIN_VALUE)
+        System.gc();
+
+        if (maxTime ==  Long.MIN_VALUE)
             System.out.println("infinity");
         else
             System.out.println(maxTime);
@@ -188,30 +174,28 @@ public class Savethecat {
             System.out.println("stay");
         else {
             String ans = " ";
-            while (parent.get(Target) != tr) {
-                if (parent.get(Target).getX() == Target.getX() - 1) {
+            while (!parent.get(Target).equals(tr)) {
+                if ((long) parent.get(Target).getX() == (long) Target.getX() - 1) {
                     ans = 'D' + ans;
                     Target = parent.get(Target);
-                }
-                else if (parent.get(Target).getY() == Target.getY() + 1) {
-                    ans = 'U' + ans;
+                } else if ((long) parent.get(Target).getY() == (long) Target.getY() + 1) {
+                    ans = 'L' + ans;
                     Target = parent.get(Target);
-                }
-                else if (parent.get(Target).getY() == Target.getY() - 1) {
+                } else if ((long) parent.get(Target).getY() == (long) Target.getY() - 1) {
                     ans = 'R' + ans;
                     Target = parent.get(Target);
-                }
-                else if (parent.get(Target).getX() == Target.getX() + 1) {
+                } else if ((long) parent.get(Target).getX() == (long) Target.getX() + 1) {
                     ans = 'U' + ans;
                     Target = parent.get(Target);
                 }
-
             }
-
             System.out.println(ans);
-
+            System.gc();
         }
-
+       // long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+       // long actualMemUsed=afterUsedMem-beforeUsedMem;
+       // System.out.println(actualMemUsed);
     }
+
 
 }

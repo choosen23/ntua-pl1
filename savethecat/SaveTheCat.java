@@ -16,8 +16,8 @@ public class Savethecat {
       BufferedReader bufferedReader = new BufferedReader(fileReader);
       List<char []> lines = new ArrayList<char []>();
       String line = null;
-      int N = 0;
-      int M = 0;
+     longN = 0;
+     longM = 0;
       while ((line = bufferedReader.readLine()) != null) {
           if (N == 0) {
         	  M = (int)line.length();

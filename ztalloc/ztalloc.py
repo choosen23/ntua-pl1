@@ -1,4 +1,5 @@
 import sys
+import gc
 
 def bfs(l_in, r_in, r_out, l_out):
     level = dict()
@@ -26,6 +27,7 @@ def bfs(l_in, r_in, r_out, l_out):
                     return parent, level, (3*u[0]+1, 3*u[1]+1)
         frontier = list(next)
         i += 1
+        print(parent)
     print('IMPOSSIBLE')
     return [], [], -1
 
@@ -35,6 +37,7 @@ f = open(filename, "r")
 Q = int(f.readline())
 for _ in range(Q):
     l_in, r_in, l_out, r_out = [int(x) for x in f.readline().split()]
+    
     if not (r_out < l_in and l_out < l_in or r_out > r_in and l_out > r_in) :
         print('EMPTY')
         continue
@@ -50,3 +53,4 @@ for _ in range(Q):
                 answer = 't' + answer
                 c = parent[c]
         print(answer)
+        gc.collect()
