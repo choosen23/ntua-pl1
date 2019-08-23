@@ -27,7 +27,6 @@ def bfs(l_in, r_in, r_out, l_out):
                     return parent, level, (3*u[0]+1, 3*u[1]+1)
         frontier = list(next)
         i += 1
-        print(parent)
     print('IMPOSSIBLE')
     return [], [], -1
 
@@ -42,11 +41,25 @@ for _ in range(Q):
         print('EMPTY')
         continue
     parent, level, target = bfs(l_in, r_in, r_out, l_out)
+    
+    
+#     print("p")
+#    print(parent)
+#     print("t")
+#     print(target)
+
+    print(len(parent))
+    print(target)
+
     if parent != []:
         c = target
         answer = ''
         while(parent[c] != -1):
             if parent[c] > c:
+                # print("C")
+                # print(c)
+                # print("Parent")
+                # print(parent[c])
                 answer = 'h' + answer
                 c = parent[c]
             else:
